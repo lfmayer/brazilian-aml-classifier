@@ -1,0 +1,9 @@
+.env
+.streamlit/secrets.toml
+__pycache__/
+*.pyc
+.DS_Store
+outputs/errors.json
+
+# Keep outputs/results.db tracked (pre-classified data for Streamlit Cloud)
+# To regenerate: python -m pipeline.batch_runner
