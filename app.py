@@ -122,6 +122,12 @@ PARTY_TYPE_LABELS = {
 }
 
 # Country names + flags
+LIST_LABELS = {
+    "FATF_BLACKLIST":  "FATF Blacklist 🔴",
+    "FATF_GREYLIST":   "FATF Grey List 🟡",
+    "RFB_TAX_HAVEN":   "RFB Tax Haven (IN 1.037/2010) 🟡",
+}
+
 COUNTRY_NAMES = {
     "BRA": "Brazil 🇧🇷", "USA": "United States 🇺🇸", "DEU": "Germany 🇩🇪",
     "GBR": "United Kingdom 🇬🇧", "FRA": "France 🇫🇷", "CAN": "Canada 🇨🇦",
@@ -506,7 +512,7 @@ elif page == "🔎 Transaction Explorer":
             with col_s:
                 st.markdown(
                     party_card(
-                        row["sender_id_hash"], "CPF",
+                        "identity-protected", "CPF",
                         row["sender_jurisdiction"], bool(row["sender_is_pep"]), "Sender"
                     ),
                     unsafe_allow_html=True,
@@ -522,7 +528,7 @@ elif page == "🔎 Transaction Explorer":
             with col_r:
                 st.markdown(
                     party_card(
-                        row["receiver_id_hash"], "CNPJ",
+                        "identity-protected", "CPF",
                         row["receiver_jurisdiction"], bool(row["receiver_is_pep"]), "Receiver"
                     ),
                     unsafe_allow_html=True,
@@ -594,12 +600,6 @@ elif page == "🌍 Jurisdiction Map":
 
     st.divider()
     st.markdown("##### Flagged Jurisdictions — Detail")
-
-    LIST_LABELS = {
-        "FATF_BLACKLIST":  "FATF Blacklist 🔴",
-        "FATF_GREYLIST":   "FATF Grey List 🟡",
-        "RFB_TAX_HAVEN":   "RFB Tax Haven (IN 1.037/2010) 🟡",
-    }
 
     for _, row in jdf.iterrows():
         risk_color = COLORS.get(row["risk_contribution"], "#8b949e")
