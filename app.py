@@ -246,61 +246,92 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: 0.06em !important;
 }
 
-/* Expanders */
-[data-testid="stExpander"] {
+/* Expanders — force white background everywhere */
+[data-testid="stExpander"],
+[data-testid="stExpander"] > div,
+[data-testid="stExpander"] > div > div,
+details, details > div {
     background: #FFFFFF !important;
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 10px !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
-    margin-bottom: 8px !important;
+    background-color: #FFFFFF !important;
+    color: #1E293B !important;
 }
-[data-testid="stExpander"] summary {
+[data-testid="stExpander"] summary,
+[data-testid="stExpander"] summary p,
+[data-testid="stExpander"] summary span {
     font-family: 'Inter', sans-serif !important;
     font-weight: 600 !important;
     color: #1E293B !important;
     font-size: 13px !important;
-}
-
-/* Fix multiselect dark background */
-[data-testid="stMultiSelect"] [data-baseweb="select"] {
     background: #FFFFFF !important;
 }
-[data-testid="stMultiSelect"] [data-baseweb="tag"] {
-    background: #EFF6FF !important;
+[data-testid="stExpander"] p,
+[data-testid="stExpander"] span,
+[data-testid="stExpander"] div:not([class*="rr-"]) {
+    color: #1E293B !important;
+    background-color: transparent !important;
+}
+
+/* Force all text to be dark on light bg */
+[data-testid="stMain"] p,
+[data-testid="stMain"] span,
+[data-testid="stMain"] label,
+[data-testid="stMain"] div {
+    color: #1E293B;
+}
+[data-testid="stMain"] .stCaption,
+[data-testid="stMain"] .stCaption p {
+    color: #64748B !important;
+}
+
+/* Fix multiselect */
+[data-baseweb="select"] {
+    background: #FFFFFF !important;
+}
+[data-baseweb="select"] > div {
+    background-color: #FFFFFF !important;
+    border-color: #E2E8F0 !important;
+    color: #1E293B !important;
+}
+[data-baseweb="popover"] {
+    background: #FFFFFF !important;
+}
+[data-baseweb="menu"] {
+    background: #FFFFFF !important;
+}
+[data-baseweb="menu"] li {
+    color: #1E293B !important;
+    background: #FFFFFF !important;
+}
+[data-baseweb="menu"] li:hover {
+    background: #F4F6F9 !important;
+}
+[data-baseweb="tag"] {
+    background: #DBEAFE !important;
     color: #1E3A8A !important;
 }
-.stMultiSelect div[data-baseweb="select"] > div {
-    background-color: #FFFFFF !important;
-    border-color: #E2E8F0 !important;
-}
 
-/* Fix text input */
-[data-testid="stTextInput"] input {
+/* Fix text inputs */
+input[type="text"], input[type="password"], textarea {
     background: #FFFFFF !important;
     color: #1E293B !important;
     border-color: #E2E8F0 !important;
-    font-family: 'Inter', sans-serif !important;
 }
 
-/* Fix selectbox */
-[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
-    background-color: #FFFFFF !important;
-    border-color: #E2E8F0 !important;
+/* Fix selectbox dropdown */
+[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+    background: #FFFFFF !important;
     color: #1E293B !important;
 }
 
-/* Login input fix */
-[data-testid="stTextInput"] label {
-    color: #374151 !important;
-    font-weight: 500 !important;
-    font-family: 'Inter', sans-serif !important;
-}
-
-/* File uploader */
-[data-testid="stFileUploader"] {
+/* Fix file uploader */
+[data-testid="stFileUploader"] section {
     background: #FFFFFF !important;
     border: 2px dashed #CBD5E1 !important;
     border-radius: 10px !important;
+}
+[data-testid="stFileUploader"] section p,
+[data-testid="stFileUploader"] section span {
+    color: #475569 !important;
 }
 
 hr { border-color: #E2E8F0 !important; margin: 16px 0 !important; }
@@ -588,23 +619,16 @@ if not st.session_state.logged_in:
 
 
 # ─────────────────────────────────────────────
-# SIDEBAR — post login
+# SIDEBAR — post login (native components only)
 # ─────────────────────────────────────────────
 with st.sidebar:
-    st.markdown(
-        '<div style="padding:4px 0 20px 0">'
-        '<div style="font-size:20px;font-weight:800;color:#FFFFFF;'
-        'font-family:Inter,sans-serif;letter-spacing:-0.02em">🎯 RiskRadar</div>'
-        '<div style="font-size:11px;color:#94A3B8;font-family:Inter,sans-serif;margin-top:2px">'
-        'AML Compliance Intelligence</div>'
-        '</div>',
-        unsafe_allow_html=True,
-    )
+    st.title("🎯 RiskRadar")
+    st.caption("AML Compliance Intelligence")
 
     st.divider()
 
     page = st.radio(
-        "nav",
+        "Navigation",
         ["📊  Overview", "🔎  Transaction Explorer",
          "🌍  Jurisdiction Map", "📋  Transaction Detail",
          "📥  Import Transactions", "ℹ️  About RiskRadar"],
@@ -614,50 +638,25 @@ with st.sidebar:
     st.divider()
 
     summary = fetch_summary()
-    st.markdown(
-        f'<div style="font-family:Inter,sans-serif">'
-        f'<div style="font-size:10px;font-weight:700;color:#64748B;text-transform:uppercase;'
-        f'letter-spacing:.1em;margin-bottom:10px">Database</div>'
-        f'<div style="display:flex;justify-content:space-between;padding:5px 0;'
-        f'border-bottom:1px solid #1A3A6B;font-size:12px">'
-        f'<span style="color:#94A3B8">Transactions</span>'
-        f'<span style="color:#FFFFFF;font-weight:600">{summary["total_transactions"]}</span></div>'
-        f'<div style="display:flex;justify-content:space-between;padding:5px 0;'
-        f'border-bottom:1px solid #1A3A6B;font-size:12px">'
-        f'<span style="color:#94A3B8">Classified</span>'
-        f'<span style="color:#4ADE80;font-weight:600">{summary["classified"]}</span></div>'
-        f'<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px">'
-        f'<span style="color:#94A3B8">Pending</span>'
-        f'<span style="color:#FCD34D;font-weight:600">{summary["pending"]}</span></div>'
-        f'</div>',
-        unsafe_allow_html=True,
-    )
+    st.caption("DATABASE STATUS")
+    col_a, col_b = st.columns(2)
+    col_a.metric("Transactions", summary["total_transactions"])
+    col_b.metric("Classified",   summary["classified"])
 
-    st.markdown("<div style='margin-top:10px'></div>", unsafe_allow_html=True)
-    if st.button("↻ Refresh", use_container_width=True):
+    if st.button("↻ Refresh Data", use_container_width=True):
         st.cache_data.clear()
         st.rerun()
 
     st.divider()
 
     username_display = st.session_state.get("username", "analyst@firm.com")
-    st.markdown(
-        f'<div style="font-size:11px;color:#64748B;font-family:Inter,sans-serif;line-height:1.7">'
-        f'Signed in as<br>'
-        f'<span style="color:#CBD5E1;font-weight:600">{username_display}</span></div>',
-        unsafe_allow_html=True,
-    )
+    st.caption(f"Signed in as {username_display}")
     if st.button("Sign out", use_container_width=True):
         st.session_state.logged_in = False
         st.rerun()
 
-    st.markdown(
-        '<div style="margin-top:16px;font-size:10px;color:#334155;'
-        'font-family:Inter,sans-serif;line-height:1.7">'
-        'Synthetic data only.<br>Not a legal or compliance system.<br>'
-        'Human review required before<br>any real-world action.</div>',
-        unsafe_allow_html=True,
-    )
+    st.divider()
+    st.caption("Synthetic data only. Not a legal or compliance system. Human review required before any real-world action.")
 
 
 # ─────────────────────────────────────────────
