@@ -622,7 +622,7 @@ if not st.session_state.logged_in:
 # SIDEBAR — post login (native components only)
 # ─────────────────────────────────────────────
 with st.sidebar:
-    st.title("🎯 RiskRadar")
+    st.markdown("### RiskRadar")
     st.caption("AML Compliance Intelligence")
 
     st.divider()
@@ -1080,8 +1080,9 @@ elif page == "📋  Transaction Detail":
         signals = json.loads(t["signals_identified"]) if isinstance(t["signals_identified"], str) else t["signals_identified"]
         is_triggered = t["status"] == "TRIGGERED"
         label = TYPOLOGY_LABELS.get(t["typology"], t["typology"])
+        status_text = "TRIGGERED" if is_triggered else t["status"].replace("_", " ")
         with st.expander(
-            f"{'🔴' if is_triggered else '⚪'} {label} — {t['status'].replace('_', ' ')}",
+            f"{label} — {status_text}",
             expanded=is_triggered,
         ):
             st.markdown(
@@ -1169,7 +1170,7 @@ elif page == "📋  Transaction Detail":
             )
 
     # Raw JSON
-    with st.expander("🔧 Raw JSON Output — Technical"):
+    with st.expander("Raw JSON Output — Technical"):
         st.code(cls["raw_response_json"], language="json")
 
     st.markdown(
@@ -1203,7 +1204,7 @@ elif page == "📥  Import Transactions":
     )
 
     # Required columns info
-    with st.expander("📋 Required CSV columns"):
+    with st.expander("Required CSV columns"):
         st.markdown(
             '<div style="font-size:12px;color:#475569;font-family:Inter,sans-serif;line-height:1.8">'
             'Your CSV must contain the following columns:<br><br>'
